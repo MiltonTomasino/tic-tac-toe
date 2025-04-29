@@ -74,6 +74,7 @@ const Game = (() => {
     let gameOver;
 
     const start = (player1 = "player 1", player2 = "player 2") => {
+        players = [];
         console.log(`player1: ${player1}, player2: ${player2}`);
         
         players.push(createPlayer(player1, "X"));
@@ -95,16 +96,17 @@ const Game = (() => {
         }
 
         gameBoard.update(index, players[currPlayer].mark)
-        currPlayer = currPlayer === 0 ? 1 : 0;
 
         if (checkGameBoard(gameBoard.getBoard())) {
             console.log(`Game Over`);
+            externalUI.displayWinner(players[currPlayer]);
             gameOver = true;
             
         } else if (checkDraw(gameBoard.getBoard())) {
             console.log("Draw");
             gameOver = true;   
         }
+        currPlayer = currPlayer === 0 ? 1 : 0;
     }
 
     const reset = () => {
@@ -114,6 +116,7 @@ const Game = (() => {
         gameOver = false;
         currPlayer = 0;
         gameBoard.render();
+        externalUI.clearUI();
     }
 
     return {
@@ -125,25 +128,55 @@ const Game = (() => {
 
 const externalUI = (() => {
 
+    let message = document.querySelector(".message");
     let render = document.querySelector(".render");
+    let player1 = document.querySelector("#player1");
+    let player2 = document.querySelector("#player2");
 
     render.addEventListener("click", () => {
 
-        let player1 = document.querySelector("#player1").value.trim();
-        player1 = player1 === "" ? undefined : player1;
-        let player2 = document.querySelector("#player2").value.trim();
-        player2 = player2 === "" ? undefined : player2;
+        let name1 = player1.value.trim();
+        let name2 = player2.value.trim();
+        
+        name1 = name1 === "" ? undefined : name1;
+        name2 = name2 === "" ? undefined : name2;
 
-        Game.start(player1, player2);
+        Game.start(name1, name2);
     })
 
     let reset = document.querySelector(".reset");
 
     reset.addEventListener("click", Game.reset);
 
+    const displayWinner = (player) => {
+
+        message.textContent = `${player.name} Wins!`;
+        message.showModal();
+    }
+
+    const clearUI = () => {
+        message.textContent = "";
+        player1.value = "";
+        player2.value = "";
+    }
+
+    message.addEventListener("click", (e) => {
+        const rect = message.getBoundingClientRect();
+        const clickedOutside =
+            e.clientX < rect.left ||
+            e.clientX > rect.right ||
+            e.clientY < rect.top ||
+            e.clientY > rect.bottom;
     
+        if (clickedOutside) {
+            message.close();
+        }
+    });
 
+    return {
+        displayWinner,
+        clearUI,
+    }
+})();
 
-})
-
-externalUI();
+externalUI;
