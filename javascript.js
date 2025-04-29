@@ -74,6 +74,8 @@ const Game = (() => {
     let gameOver;
 
     const start = (player1 = "player 1", player2 = "player 2") => {
+        console.log(`player1: ${player1}, player2: ${player2}`);
+        
         players.push(createPlayer(player1, "X"));
         players.push(createPlayer(player2, "O"));
 
@@ -121,18 +123,27 @@ const Game = (() => {
     }
 })();
 
-const externalButtons = (() => {
+const externalUI = (() => {
 
     let render = document.querySelector(".render");
 
     render.addEventListener("click", () => {
-        Game.start();
+
+        let player1 = document.querySelector("#player1").value.trim();
+        player1 = player1 === "" ? undefined : player1;
+        let player2 = document.querySelector("#player2").value.trim();
+        player2 = player2 === "" ? undefined : player2;
+
+        Game.start(player1, player2);
     })
 
     let reset = document.querySelector(".reset");
 
     reset.addEventListener("click", Game.reset);
 
+    
+
+
 })
 
-externalButtons();
+externalUI();
