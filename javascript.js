@@ -79,8 +79,8 @@ const Game = (() => {
         
         players.push(createPlayer(player1, "X"));
         players.push(createPlayer(player2, "O"));
-
         currPlayer = 0;
+        externalUI.displayCurrPlayer(players[currPlayer]);
         gameOver = false;
         gameBoard.render();
     }
@@ -107,6 +107,7 @@ const Game = (() => {
             gameOver = true;   
         }
         currPlayer = currPlayer === 0 ? 1 : 0;
+        externalUI.displayCurrPlayer(players[currPlayer])
     }
 
     const reset = () => {
@@ -173,9 +174,15 @@ const externalUI = (() => {
         }
     });
 
+    const displayCurrPlayer = (player) => {
+        let currentPlayer = document.querySelector(".curr-player");
+        currentPlayer.textContent = `${player.name}'s turn (${player.mark})`
+    }
+
     return {
         displayWinner,
         clearUI,
+        displayCurrPlayer,
     }
 })();
 

@@ -6,13 +6,28 @@
 
 .container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 200px);
     grid-template-rows: repeat(3, 150px);
     gap: 20px;
+    justify-self: center;
 }
 
 .square {
     outline: 2px solid black;
+    font-size: 80px;
+    font-weight: bold;
+    text-align: center;
+    align-content: center;
+}
+
+.header {
+    justify-self: center;
+    text-align: center;
+    width: 500px;
+}
+
+.buttons {
+    justify-self: center;
 }
 
 .message {
